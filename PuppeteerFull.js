@@ -1,6 +1,12 @@
 const puppeteer = require('puppeteer');
+require('dotenv').config();
 
-const browserPromise = puppeteer.launch({headless:true});
+const browserPromise = puppeteer.launch({args:[
+    '--disable-setuid-sandbox',
+    '--no-sandbox',
+    '--single-process',
+    '--no-zygote'
+],headless:true, executablePath: process.env.NODE_ENV=='production'?process.env.PUPPETEER_EXECUTABLE_PATH:puppeteer.executablePath()});
 module.exports= async function PuppeteerFull(username){
 
     const ret = {
