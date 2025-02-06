@@ -1,27 +1,17 @@
-const express = require('express');
-const PuppeteerFull = require('./PuppeteerFull'); // Import your function
-
+const express = require("express");
+const { scrapeLogic } = require("./scrapeLogic");
 const app = express();
-const PORT = 3000; // Change as needed
 
-// API Route: Fetch Instagram page title
-app.get('/instagram/:username', async (req, res) => {
-    const { username } = req.params;
-    
-    if (!username) {
-        return res.status(400).json({ error: "Username is required" });
-    }
+const PORT = process.env.PORT || 4000;
 
-    try {
-        const result = await PuppeteerFull(username);
-        res.send(result);
-    } catch (error) {
-        console.error("Error in Puppeteer:", error);
-        res.status(500).json({ error: "Internal Server Error" });
-    }
+app.get("/scrape", (req, res) => {
+  scrapeLogic(res);
 });
 
-// Start Express Server
+app.get("/", (req, res) => {
+  res.send("Render Puppeteer server is up and running!");
+});
+
 app.listen(PORT, () => {
-    console.log(`🚀 Server running at http://localhost:${PORT}`);
+  console.log(`Listening on port ${PORT}`);
 });
